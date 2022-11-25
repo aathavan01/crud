@@ -50,23 +50,31 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: CircularProgressIndicator(),
                     );
                   }
+
                   if (snapshot.hasData) {
+                    for (var i = 0; i < snapshot.data!.docs.length; i++) {
+
+                      print(snapshot.data!.docs[i].reference.toString());
+                    
+                    // print(snapshot.data!.docs[0].reference.toString());
+
                     return GridView(
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2),
                       children: snapshot.data!.docs
-                          .map((note) => noteCard(() {
+                          .map((note,) => noteCard(() {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        NoteReaderScreen(note),
+                                        NoteReaderScreen(note,),
                                   ),
                                 );
                               }, note))
                           .toList(),
                     );
+                  }
                   }
                   return Text(
                     "ther's no Notes",
@@ -80,8 +88,12 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const NoteEditorScreen(),),);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const NoteEditorScreen(),
+            ),
+          );
         },
         label: const Text("Add Note"),
         icon: const Icon(Icons.add),

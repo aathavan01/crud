@@ -10,11 +10,29 @@ class NoteReaderScreen extends StatefulWidget {
   @override
   State<NoteReaderScreen> createState() => _NoteReaderScreenState();
 }
+DocumentReference ref = FirebaseFirestore.instance.collection("Notes").doc();
+  String myId = ref.id;
 
 class _NoteReaderScreenState extends State<NoteReaderScreen> {
+
   @override
   Widget build(BuildContext context) {
     int color_id = widget.doc['color_id'];
+    String note_title = widget.doc['note_title'];
+    String note_content = widget.doc['note_content'];
+    String creation_date = widget.doc['creation_date'];
+      void delete()
+                  // {
+                  //   print([note_title,color_id,note_content,creation_date]);
+                  // };
+                  async {
+                await FirebaseFirestore.instance
+                    .collection("Notes")
+                    .doc()
+                    .delete()
+                    .then((value) => print("deleted"));
+                    
+              };
     return Scaffold(
       backgroundColor: AppStyle.cardColor[color_id],
       appBar: AppBar(
@@ -22,30 +40,12 @@ class _NoteReaderScreenState extends State<NoteReaderScreen> {
         elevation: 0.0,
         actions: [
           IconButton(
-              onPressed: () async {
-                await FirebaseFirestore.instance
-                    .collection("Notes")
-                    .doc('note_title,creation_date,note_content')
-                    .delete()
-                    .then((value) {
-                  Navigator.pop(context);
-                }).catchError((error) => print("failed"));
-              },
+              onPressed:delete,
+
               icon: const Icon(
                 Icons.delete,
                 color: Colors.red,
               )),
-          // IconButton(
-          //     onPressed: () async {
-          //       await FirebaseFirestore.instance
-          //           .collection("Notes")
-          //           .doc()
-          //           .update();
-          //     },
-          //     icon: const Icon(
-          //       Icons.edit,
-          //       color: Colors.red,
-          //     ))
         ],
       ),
       body: Padding(
